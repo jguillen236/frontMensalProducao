@@ -32,15 +32,15 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       
       - name: Create credentials file
-        run: echo '${{ secrets.GCP_SA_KEY }}' > ./terraform/stage/account.json
+        run: echo '${{ secrets.GCP_SA_KEY }}' > ./terraform/prod/account.json
 
       - name: Terraform Init
-        working-directory: ./terraform/stage
+        working-directory: ./terraform/prod
         run: terraform init -upgrade
 
       - name: Terraform Apply
-        working-directory: ./terraform/stage
-        run: terraform apply -auto-approve -var-file="stage.tfvars"
+        working-directory: ./terraform/prod
+        run: terraform apply -auto-approve -var-file="prod.tfvars"
 
   build-and-push:
     name: Build and Push to Google Artifact Registry
@@ -60,11 +60,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-         docker build -t us-docker.pkg.dev/cluster-mensal-462916/gcr.io/frontend:latest .
+         docker build -t us-docker.pkg.dev/cluster-producao/gcr.io/frontend:prod .
 
       - name: Push Docker image
         run: |
-          docker push us-docker.pkg.dev/cluster-mensal-462916/gcr.io/frontend:latest
+          docker push us-docker.pkg.dev/cluster-producao/gcr.io/frontend:prod
 
   deploy:
     name: Deploy to GKE
