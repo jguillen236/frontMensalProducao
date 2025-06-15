@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      annotations:
+        redeploy-timestamp: "REPLACE_ME"
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: us-docker.pkg.dev/cluster-mensal-462916/gcr.io/frontend:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+
+##dqwdqwdqwdasdas
