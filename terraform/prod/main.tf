@@ -12,6 +12,7 @@ terraform {
 provider "google" {
   project = "cluster-producao"
   region  = "us-central1"
+  credentials = file("account.json")
 }
 
 resource "google_container_cluster" "primary" {
